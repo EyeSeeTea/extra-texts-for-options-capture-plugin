@@ -59,6 +59,21 @@ Each extra text can be:
 2. `yarn start`
 3. Configure the plugin in Tracker Plugin Configurator with "Add Local Plugin" -> url: `http://localhost:3000/plugin.html`.
 
+### Bulk Import from Excel
+
+For administrators who need to configure multiple fields at once, you can use the import command to bulk import configuration from an Excel file. This automates the creation of constants, configuration of the plugin data store and configuration of the capture plugins.
+
+**Quick example:**
+
+```bash
+yarn run import ./data/config.xlsx \
+  --dhis2-url http://localhost:8080 \
+  --dhis2-auth admin:district \
+  --push
+```
+
+📖 **For detailed documentation, Excel file format, and more examples, see [IMPORT.md](./IMPORT.md)**
+
 ### Generate a release
 
 1. `yarn install`
