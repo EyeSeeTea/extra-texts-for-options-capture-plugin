@@ -63,7 +63,7 @@ export function updateCaptureConfig(
                 }
 
                 const pluginElement: DataEntryFormPlugin = {
-                    id: `${PLUGIN_NAME}_${Date.now()}_${Math.random()}`,
+                    id: `${PLUGIN_NAME}_${Date.now()}_${element.questionId}`,
                     pluginSource: pluginSource,
                     type: "plugin",
                     fieldMap: [
