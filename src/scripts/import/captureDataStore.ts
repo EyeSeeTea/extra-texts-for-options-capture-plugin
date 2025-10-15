@@ -1,6 +1,7 @@
 import { D2Api } from "@eyeseetea/d2-api/2.41";
 import { DataEntryForm, DataEntryFormPlugin } from "./DataEntryForm";
 import { ImportInput } from "./ImportInput";
+import { name as PLUGIN_NAME } from "../../../d2.config.js";
 
 type CaptureConfig = Record<string, DataEntryForm[]>;
 
@@ -61,13 +62,8 @@ export function updateCaptureConfig(
                     return;
                 }
 
-                const previousElement = updatedElements[elementIndex - 1];
-                if (previousElement && previousElement.type === "plugin") {
-                    return; // Skip adding a new plugin element if the previous one is already a plugin
-                }
-
                 const pluginElement: DataEntryFormPlugin = {
-                    id: `extra-texts-for-options-capture-plugin_${Date.now()}_${Math.random()}`,
+                    id: `${PLUGIN_NAME}_${Date.now()}_${Math.random()}`,
                     pluginSource: pluginSource,
                     type: "plugin",
                     fieldMap: [
@@ -79,8 +75,18 @@ export function updateCaptureConfig(
                     ],
                 };
 
-                // Insert the plugin element before the found element
-                updatedElements.splice(elementIndex, 0, pluginElement);
+                const previousElement = updatedElements[elementIndex - 1];
+                if (
+                    previousElement &&
+                    previousElement.type === "plugin" &&
+                    previousElement.id.startsWith(PLUGIN_NAME)
+                ) {
+                    // replace the existing plugin element, might need to update settings if it is from a migration
+                    updatedElements[elementIndex - 1] = pluginElement;
+                } else {
+                    // insert the plugin element before the found element
+                    updatedElements.splice(elementIndex, 0, pluginElement);
+                }
             });
 
             return {
