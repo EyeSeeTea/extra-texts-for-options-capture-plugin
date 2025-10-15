@@ -67,6 +67,9 @@ function mapRow(sheetName: string, data: object, currentElement: ImportElement |
         concept: String((data as any)[optionMappings.concept] || "").trim(),
         definition: String((data as any)[optionMappings.definition] || "").trim(),
     };
+    if (!option.concept || !option.definition) {
+        throw new Error(`Missing ${optionMappings.concept} or ${optionMappings.definition} in sheet "${sheetName}"`);
+    }
     if (
         Object.prototype.hasOwnProperty.call(data, mappings.questionId) &&
         Object.prototype.hasOwnProperty.call(data, mappings.constantCode)
