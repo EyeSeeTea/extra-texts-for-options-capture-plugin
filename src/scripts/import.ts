@@ -49,6 +49,7 @@ function main() {
                 long: "output-dir",
                 short: "o",
                 description: "Output directory for generated files to be imported into DHIS2.",
+                defaultValue: () => "",
             }),
         },
         handler: async args => {
