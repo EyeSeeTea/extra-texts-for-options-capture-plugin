@@ -74,7 +74,6 @@ function mapRow(sheetName: string, data: object, currentElement: ImportElement |
         const questionId = String((data as any)[mappings.questionId] || "").trim();
         const constantCode = String((data as any)[mappings.constantCode] || "").trim();
         if (!currentElement && (!questionId || !DHIS2_ID_REGEX.test(questionId))) {
-            console.error({ currentElement, questionId });
             throw new Error(`Invalid or missing QuestionUID in sheet "${sheetName}"`);
         }
         if (!currentElement && !constantCode) {

@@ -58,45 +58,50 @@ function main() {
                 const auth = { username, password };
                 const api = new D2Api({ baseUrl: args.url, auth: auth, backend: "xhr" });
                 const info = await api.system.info.getData();
-                console.log(`Connected to DHIS2: ${info.contextPath} (v${info.version})`);
+                console.log(`✅ Connected to DHIS2: ${info.contextPath} (v${info.version})`);
                 const pluginUrl = getPluginUrl(api);
-                console.log(`Using plugin URL: ${pluginUrl}`);
+                console.log(`🔗 Using plugin URL: ${pluginUrl}`);
                 const excelData = await parseExcelFile(args.inputFile);
                 const captureConfig = await getCaptureConfig(api);
                 for (const sheet of excelData) {
                     validateCaptureConfig(captureConfig, sheet);
                 }
-                console.debug("All question IDs from the Excel file are valid and present in capture/dataEntryForms.");
+                console.log("✓ All question IDs from the Excel file are valid and present in capture/dataEntryForms");
                 const constants = buildConstants(excelData);
-                console.debug(`Built ${constants.length} constants.`);
+                console.log(`🔧 Built ${constants.length} constants`);
                 if (args.outputDir) {
                     await saveJSONToFile({ constants }, args.outputDir, "constants.json");
                 }
                 if (args.push) {
-                    console.debug(`Importing ${constants.length} constants...`);
+                    console.log(`⬆️  Importing ${constants.length} constants to DHIS2...`);
                     await importConstants(api, constants);
+                    console.log("   ✓ Constants imported successfully");
                 }
                 const currentPluginConfig = await getPluginDataStore(api);
                 const newPluginConfig = updatePluginConfig(currentPluginConfig, excelData);
-                console.debug("Updated plugin config");
+                console.log("🔧 Prepared plugin configuration updates");
                 if (args.outputDir) {
                     await saveJSONToFile(newPluginConfig, args.outputDir, "pluginDataStore.json");
                 }
                 if (args.push) {
-                    console.debug("Saving updated plugin config to DHIS2...");
+                    console.log("⬆️  Saving plugin configuration to DHIS2...");
                     await savePluginDataStore(api, newPluginConfig);
+                    console.log("   ✓ Plugin configuration saved successfully");
                 }
                 const newCaptureConfig = updateCaptureConfig(captureConfig, excelData, pluginUrl);
-                console.debug("Updated capture/dataEntryForms config");
+                console.log("🔧 Prepared capture/dataEntryForms configuration updates");
                 if (args.outputDir) {
                     await saveJSONToFile(newCaptureConfig, args.outputDir, "captureDataEntryForms.json");
                 }
                 if (args.push) {
-                    console.debug("Saving updated capture/dataEntryForms config to DHIS2...");
+                    console.log("⬆️  Saving capture/dataEntryForms configuration to DHIS2...");
                     await saveCaptureConfig(api, newCaptureConfig);
+                    console.log("   ✓ Capture configuration saved successfully");
                 }
+                console.log("\n✨ Done! Import completed successfully.\n");
+                process.exit(0);
             } catch (error) {
-                console.error("Error:", error instanceof Error ? error.message : String(error));
+                console.error("\n❌ Error:", error instanceof Error ? error.message : String(error));
                 process.exit(1);
             }
         },
@@ -111,7 +116,7 @@ async function saveJSONToFile(data: any, outputDir: string, fileName: string) {
     const fullPath = path.join(outputDir, fileName);
     await fs.mkdir(outputDir, { recursive: true });
     await fs.writeFile(fullPath, JSON.stringify(data, null, 2), "utf-8");
-    console.log(`Saved ${fullPath}`);
+    console.log(`💾 Saved file: ${fullPath}`);
 }
 
 main();
