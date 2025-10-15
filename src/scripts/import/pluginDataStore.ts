@@ -10,7 +10,7 @@ const PLUGIN_KEY = "extraTexts";
 export async function getPluginDataStore(api: D2Api): Promise<PluginConfig> {
     try {
         const config = await api.dataStore(PLUGIN_NAMESPACE).get<PluginConfig>(PLUGIN_KEY).getData();
-        return config;
+        return config ?? {};
     } catch (error) {
         if ((error as any).response?.status === 404) {
             return {};

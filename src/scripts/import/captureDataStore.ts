@@ -9,7 +9,7 @@ const CAPTURE_KEY = "dataEntryForms";
 
 export async function getCaptureConfig(api: D2Api): Promise<CaptureConfig> {
     const config = await api.dataStore(CAPTURE_NAMESPACE).get<CaptureConfig>(CAPTURE_KEY).getData();
-    return config;
+    return config ?? {};
 }
 
 export async function saveCaptureConfig(api: D2Api, config: CaptureConfig) {
