@@ -1,7 +1,7 @@
 import { command, run, string, option, positional, flag, boolean } from "cmd-ts";
 import path from "path";
 
-import { D2Api } from "@eyeseetea/d2-api/2.41";
+import { D2Api } from "./d2-api";
 import { parseExcelFile } from "./import/parseExcelFile";
 import {
     getCaptureConfig,

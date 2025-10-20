@@ -1,4 +1,4 @@
-import { D2Api } from "@eyeseetea/d2-api/2.41";
+import { D2Api } from "../d2-api";
 import { DataEntryForm, DataEntryFormPlugin } from "./DataEntryForm";
 import { ImportInput } from "./ImportInput";
 import { name as PLUGIN_NAME } from "../../../d2.config.js";
