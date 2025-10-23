@@ -39,9 +39,12 @@ export type Constant = {
     code: string;
     description: string;
     value: 0;
+    // Not typing sharingSettings because we are just passing it through to DHIS
+    // If something is wrong, import should reject it
+    sharing?: object;
 };
 
-export function buildConstants(importInput: ImportInput[]): Constant[] {
+export function buildConstants(importInput: ImportInput[], sharing: object | undefined): Constant[] {
     const constantsToCreate: Constant[] = [];
     for (const input of importInput) {
         for (const element of input.elements) {
@@ -54,6 +57,7 @@ export function buildConstants(importInput: ImportInput[]): Constant[] {
                     shortName: shortName,
                     description: `${option.concept}: ${option.definition}`,
                     value: 0,
+                    ...(sharing ? { sharing: sharing } : {}),
                 });
             }
         }

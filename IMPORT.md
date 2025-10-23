@@ -23,6 +23,7 @@ yarn run import <input-file> --dhis2-url <url> --dhis2-auth <username:password> 
 
 -   **`--push`** or **`-p`**: Actually push changes to DHIS2. Without this flag, the command only simulates the process (dry run)
 -   **`--output-dir`** or **`-o`**: Directory path to save the generated JSON files locally
+-   **`--sharing`** or **`-s`**: Path to a JSON file containing sharing settings to apply to created constants. If not provided, constants will have default sharing settings. An example file is included in [sharing_example.json](./src/scripts/import/data/sharing_example.json)
 
 ## Excel File Format
 
@@ -63,7 +64,7 @@ An example file is included in [example.xlsx](./src/scripts/import/data/example.
 ### 1. Dry run (simulation mode)
 
 ```bash
-yarn run import ./data/config.xlsx \
+yarn run import src/scripts/import/data/example.xlsx \
   --dhis2-url http://localhost:8080 \
   --dhis2-auth admin:district
 ```
@@ -71,7 +72,7 @@ yarn run import ./data/config.xlsx \
 ### 2. Push changes to DHIS2
 
 ```bash
-yarn run import ./data/config.xlsx \
+yarn run import src/scripts/import/data/example.xlsx \
   --dhis2-url https://play.dhis2.org/demo \
   --dhis2-auth admin:district \
   --push
@@ -80,7 +81,7 @@ yarn run import ./data/config.xlsx \
 ### 3. Save output files locally without pushing
 
 ```bash
-yarn run import ./data/config.xlsx \
+yarn run import src/scripts/import/data/example.xlsx \
   --dhis2-url http://localhost:8080 \
   --dhis2-auth admin:district \
   --output-dir ./output
@@ -92,7 +93,7 @@ yarn run import ./data/config.xlsx \
 export DHIS2_URL=http://localhost:8080
 export DHIS2_AUTH=admin:district
 
-yarn run import ./data/config.xlsx --push
+yarn run import src/scripts/import/data/example.xlsx --push
 ```
 
 ### 5. Full example with all options
@@ -101,6 +102,7 @@ yarn run import ./data/config.xlsx --push
 yarn run import ./data/pregnancy-config.xlsx \
   --dhis2-url https://play.dhis2.org/demo \
   --dhis2-auth admin:district \
+  --sharing ./src/scripts/import/data/sharing_example.json \
   --push \
   --output-dir ./src/scripts/import/output
 ```
@@ -113,6 +115,7 @@ When executed with the `--push` flag, the import command:
 2. **Creates DHIS2 constants** one constant per row with:
     - Code: `Key` column as prefix, and the value from `Response`
     - Description: `{response}: {Audit Evidence}`
+    - Sharing settings: if a `--sharing` file is provided, it will be included as-is during the import.
 3. **Updates the plugin data store** (`extra-texts-for-options-capture-plugin/extraTexts`) with the field mappings (`Key`) to all constants created for that key.
 4. **Updates capture data entry forms** to include the extra texts plugin with the configuration, before each question
 
