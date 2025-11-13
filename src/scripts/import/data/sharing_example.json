@@ -1,0 +1,9 @@
+{
+    "owner": "user uid",
+    "external": false,
+    "users": {},
+    "userGroups": {
+        "user group uid": { "displayName": "user group name", "access": "r-------", "id": "user group uid" }
+    },
+    "public": "--------"
+}
